@@ -1,0 +1,4 @@
+PORTS="1/0/25-27"
+GROUP_ID="7"
+PORT_PRIORITY="0"
+MODE="static"

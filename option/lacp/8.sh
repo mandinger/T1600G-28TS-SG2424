@@ -1,0 +1,4 @@
+PORTS="1/0/28"
+GROUP_ID="8"
+PORT_PRIORITY="0"
+MODE="static"
