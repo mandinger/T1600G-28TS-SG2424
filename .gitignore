@@ -17,3 +17,12 @@ firmware/*.zip
 
 ### Backup ###
 backup/backup*
+
+### Python / FastAPI ###
+__pycache__/
+*.pyc
+.pytest_cache/
+
+### Runtime Data ###
+data/
+.env
