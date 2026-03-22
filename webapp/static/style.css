@@ -18,6 +18,13 @@ body { margin: 0; background: radial-gradient(circle at top left, #e6f4ea, var(-
 .grid { display: grid; gap: 16px; }
 .grid.two { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .stack { display: grid; gap: 10px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.plus-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 1.35rem; line-height: 1; cursor: pointer; user-select: none; }
+.create-switch-panel { margin-left: auto; }
+.create-switch-panel > summary { list-style: none; }
+.create-switch-panel > summary::-webkit-details-marker { display: none; }
+.create-switch-body { margin-top: 12px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; width: min(420px, 88vw); }
+.create-switch-body h3 { margin: 0 0 10px; }
 input, textarea, button { font: inherit; }
 input, textarea { width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; }
 button { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 9px 12px; cursor: pointer; }

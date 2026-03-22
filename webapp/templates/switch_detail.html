@@ -16,6 +16,9 @@
     <label>Bot Privilege<input name="bot_privilege" value="{{ switch.bot_privilege }}" /></label>
     <label>Bot Password<input name="bot_password" type="password" /></label>
     <label>TFTP Source IP<input name="tftp_source_ip" value="{{ switch.tftp_source_ip }}" /></label>
+    {% for env_field in switch_env_fields %}
+    <label>{{ env_field.label }}<input name="{{ env_field.attr_name }}" value="{{ switch_env_values[env_field.attr_name] }}" /></label>
+    {% endfor %}
     <div class="row-actions">
       <button type="submit">Update Switch</button>
     </div>

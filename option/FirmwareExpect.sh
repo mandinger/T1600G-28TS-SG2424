@@ -10,7 +10,14 @@ set filename [lindex $argv 3]
 set consoleMsg "T1600G-28TS"
 set lineBreak "\r"
 
-spawn ssh $USER_ADMIN@$DEVICE_IP
+spawn ssh \
+  -o StrictHostKeyChecking=no \
+  -o UserKnownHostsFile=/dev/null \
+  -o KexAlgorithms=+diffie-hellman-group1-sha1 \
+  -o HostKeyAlgorithms=+ssh-rsa,+ssh-dss \
+  -o PubkeyAcceptedAlgorithms=+ssh-rsa \
+  -o Ciphers=aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc \
+  $USER_ADMIN@$DEVICE_IP
 
 expect "${consoleMsg}>" { send "enable${lineBreak}" }
 expect "${consoleMsg}#" { send "firmware upgrade ip-address $ipAddress filename ${filename}${lineBreak}" }

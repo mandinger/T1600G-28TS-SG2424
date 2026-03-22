@@ -64,3 +64,16 @@ def test_profile_materialization_creates_runtime_files(tmp_path) -> None:
     assert context.bot_password_output.parent.exists()
     assert (tmp_path / "runtime" / "job-500" / "profile" / "vlan" / "1.sh").exists()
     assert context.env["VLAN_PATH_OF_VARIABLES_WITH_FILTER"].endswith("*.sh")
+
+
+def test_merged_profile_ignores_legacy_override_keys() -> None:
+    profile = merged_profile(
+        {
+            "time_zone": "UTC+00:00",
+            "env_overrides": {"TIME_ZONE": "UTC+03:00"},
+            "vlans": [],
+        }
+    )
+
+    assert "time_zone" not in profile
+    assert "env_overrides" not in profile

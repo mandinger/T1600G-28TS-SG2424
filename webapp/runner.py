@@ -10,6 +10,7 @@ from typing import Any
 from .actions import ActionDefinition
 from .config import get_settings
 from .profile_builder import merged_profile, write_profile_files
+from .switch_env_overrides import switch_env_values_for_runner
 
 
 @dataclass
@@ -80,28 +81,12 @@ def build_execution_context(
             "VLAN_PATH_OF_VARIABLES": str(vlan_dir),
             "VLAN_PATH_OF_VARIABLES_WITH_FILTER": str(vlan_dir / "*.sh"),
             "LACP_PATH_OF_GROUPS_VARIABLES": str(lacp_dir / "*.sh"),
-            "TIME_ZONE": str(profile.get("time_zone", "UTC-03:00")),
-            "PRIMARY_NTP_SERVER": str(profile.get("primary_ntp_server", "")),
-            "SECONDARY_NTP_SERVER": str(profile.get("secondary_ntp_server", "")),
-            "NTP_UPDATE_RATE": str(profile.get("ntp_update_rate", "12")),
-            "IP_REMOTE_LOGGING_SERVER": str(profile.get("ip_remote_logging_server", "")),
-            "LOG_LEVEL": str(profile.get("log_level", 6)),
-            "SIZE_OF_JUMBO_FRAME": str(profile.get("size_of_jumbo_frame", 9216)),
-            "SDM_PREFERENCE": str(profile.get("sdm_preference", "enterpriseV4")),
-            "EEE_INTERFACES": str(profile.get("eee_interfaces", "")),
-            "EEE_LACPS": str(profile.get("eee_lacps", "")),
-            "LACP_LOAD_BALANCE": str(profile.get("lacp_load_balance", "src-dst-mac")),
-            "STATIC_ROUTE_DESTINATION_IP": str(profile.get("static_route_destination_ip", "0.0.0.0")),
-            "STATIC_ROUTE_SUBNET_MASK": str(profile.get("static_route_subnet_mask", "0.0.0.0")),
-            "STATIC_ROUTE_DEFAULT_GATEWAY_IP": str(profile.get("static_route_default_gateway_ip", "")),
-            "STATIC_ROUTE_DEFAULT_GATEWAY_DISTANCE": str(profile.get("static_route_default_gateway_distance", 1)),
-            "FIRMWARE_FILE_NAME": str(profile.get("firmware_file_name", "T1600G-28TS-V3-20200805")),
-            "FIRMWARE_URL": str(profile.get("firmware_url", "")),
-            "HTTPS_CERTIFICATE": str(profile.get("https_certificate", "switch.lan.homelab.crt")),
-            "HTTPS_CERTIFICATE_KEY": str(profile.get("https_certificate_key", "switch.lan.homelab.key")),
-            "RUNNER_TFTP_IP": switch.tftp_source_ip or get_settings().tftp_ip,
+            "RUNNER_TFTP_IP": switch.tftp_source_ip or settings.tftp_ip,
         }
     )
+
+    # Apply per-switch environment values stored directly on switch entity.
+    env.update(switch_env_values_for_runner(switch))
 
     command = [str(settings.repo_root / "scripts" / "run_switch_action.sh")]
     return ExecutionContext(command=command, env=env, log_path=log_path, bot_password_output=bot_password_output)

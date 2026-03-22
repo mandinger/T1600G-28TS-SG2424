@@ -7,9 +7,10 @@ This repository now includes a FastAPI web/API control plane that wraps the exis
 ### Features
 - Docker Compose deployment with `network_mode: host`.
 - Server-rendered web UI with RBAC login (`admin`, `operator`, `viewer`).
+- Configuration is environment-driven via `.env` (legacy `Constants.sh` was removed).
 - SQLite data model for:
 - `users`, `roles`, `switches`, `encrypted_credentials`, `switch_profiles`, `jobs`, `job_events`.
-- Action registry exposing all 27 utilities.
+- Action registry exposing runtime switch utilities (deprecated host-prep action removed).
 - Risky operations are visible but disabled in v1:
 - `upgrade_firmware`, `reboot`, `factory_reset`, `restore_latest_backup`.
 - Per-switch execution lock: only one active job per switch at a time.
@@ -45,32 +46,31 @@ Default bootstrap admin credentials come from:
 #### Options you can execute:
 0. Exit.
 1. Setup Switch from Zero to Hero!
-2. Prepare Host Machine.
-3. Set static IP
-4. Enable SSH.
-5. Enable Password Encryption.
-6. Create Bot User.
-7. Set Link Aggregation Control Protocol (LACP).
-8. Set Vlans.
-9. Set PVID.
-10. Enable IPV4 routing.
-11. Set Interfaces.
-12. Set IPv4 Static Routing to Default Gateway.
-13. Set System Time from NTP Server.
-14. Enable HTTPS.
-15. Disable HTTP.
-16. Set Jumbo Size.
-17. Enable DoS Defend.
-18. Set Device Description.
-19. Set SDM Preference.
-20. Enable Remote Logging.
-21. Disable Telnet.
-22. Enable EEE.
-23. Upgrade Firmware.
-24. Backup.
-25. Reboot.
-26. Reset with Factory Settings.
-27. Restore Settings from Latest Backup.
+2. Set static IP
+3. Enable SSH.
+4. Enable Password Encryption.
+5. Create Bot User.
+6. Set Link Aggregation Control Protocol (LACP).
+7. Set Vlans.
+8. Set PVID.
+9. Enable IPV4 routing.
+10. Set Interfaces.
+11. Set IPv4 Static Routing to Default Gateway.
+12. Set System Time from NTP Server.
+13. Enable HTTPS.
+14. Disable HTTP.
+15. Set Jumbo Size.
+16. Enable DoS Defend.
+17. Set Device Description.
+18. Set SDM Preference.
+19. Enable Remote Logging.
+20. Disable Telnet.
+21. Enable EEE.
+22. Upgrade Firmware.
+23. Backup.
+24. Reboot.
+25. Reset with Factory Settings.
+26. Restore Settings from Latest Backup.
 
 #### Credentials:
 1. Create a strong password for the admin user and store it in the secret manager. After you hit enter, a password will be asked.

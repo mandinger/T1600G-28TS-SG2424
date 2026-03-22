@@ -4,27 +4,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .switch_env_overrides import SWITCH_FIELD_NAMES
 
 DEFAULT_PROFILE: dict[str, Any] = {
-    "time_zone": "UTC-03:00",
-    "primary_ntp_server": "200.160.7.186",
-    "secondary_ntp_server": "200.160.0.8",
-    "ntp_update_rate": "12",
-    "ip_remote_logging_server": "10.0.2.5",
-    "log_level": 6,
-    "size_of_jumbo_frame": 9216,
-    "sdm_preference": "enterpriseV4",
-    "eee_interfaces": "1/0/1-24",
-    "eee_lacps": "1-6",
-    "lacp_load_balance": "src-dst-mac",
-    "static_route_destination_ip": "0.0.0.0",
-    "static_route_subnet_mask": "0.0.0.0",
-    "static_route_default_gateway_ip": "192.168.0.2",
-    "static_route_default_gateway_distance": 1,
-    "https_certificate": "switch.lan.homelab.crt",
-    "https_certificate_key": "switch.lan.homelab.key",
-    "firmware_file_name": "T1600G-28TS-V3-20200805",
-    "firmware_url": "https://static.tp-link.com/2020/202009/20200922/T1600G-28TS(UN)_V3_20200805.zip",
     "vlans": [
         {
             "vlan_id": "1",
@@ -63,6 +45,8 @@ DEFAULT_PROFILE: dict[str, Any] = {
     ],
 }
 
+_DEPRECATED_PROFILE_KEYS: set[str] = set(SWITCH_FIELD_NAMES) | {"env_overrides"}
+
 
 def default_profile() -> dict[str, Any]:
     return json.loads(json.dumps(DEFAULT_PROFILE))
@@ -74,6 +58,8 @@ def merged_profile(profile: dict[str, Any] | None) -> dict[str, Any]:
         return out
 
     for key, value in profile.items():
+        if key in _DEPRECATED_PROFILE_KEYS:
+            continue
         out[key] = value
 
     if "vlans" not in out or not isinstance(out["vlans"], list):

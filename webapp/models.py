@@ -6,6 +6,7 @@ from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
+from .switch_env_overrides import SWITCH_FIELD_DEFAULTS
 
 
 def utcnow() -> datetime:
@@ -58,6 +59,41 @@ class Switch(Base):
     bot_username: Mapped[str] = mapped_column(String(64), default="switch-user-bot", nullable=False)
     bot_privilege: Mapped[str] = mapped_column(String(32), default="admin", nullable=False)
     tftp_source_ip: Mapped[str] = mapped_column(String(64), default="", nullable=False)
+    ssh_version: Mapped[str] = mapped_column(String(32), default=SWITCH_FIELD_DEFAULTS["ssh_version"], nullable=False)
+    password_length: Mapped[str] = mapped_column(String(32), default=SWITCH_FIELD_DEFAULTS["password_length"], nullable=False)
+    time_zone: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["time_zone"], nullable=False)
+    primary_ntp_server: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["primary_ntp_server"], nullable=False)
+    secondary_ntp_server: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["secondary_ntp_server"], nullable=False)
+    ntp_update_rate: Mapped[str] = mapped_column(String(32), default=SWITCH_FIELD_DEFAULTS["ntp_update_rate"], nullable=False)
+    ip_remote_logging_server: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["ip_remote_logging_server"], nullable=False)
+    log_level: Mapped[str] = mapped_column(String(32), default=SWITCH_FIELD_DEFAULTS["log_level"], nullable=False)
+    size_of_jumbo_frame: Mapped[str] = mapped_column(String(32), default=SWITCH_FIELD_DEFAULTS["size_of_jumbo_frame"], nullable=False)
+    sdm_preference: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["sdm_preference"], nullable=False)
+    eee_interfaces: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["eee_interfaces"], nullable=False)
+    eee_lacps: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["eee_lacps"], nullable=False)
+    lacp_load_balance: Mapped[str] = mapped_column(String(64), default=SWITCH_FIELD_DEFAULTS["lacp_load_balance"], nullable=False)
+    static_route_destination_ip: Mapped[str] = mapped_column(
+        String(64), default=SWITCH_FIELD_DEFAULTS["static_route_destination_ip"], nullable=False
+    )
+    static_route_subnet_mask: Mapped[str] = mapped_column(
+        String(64), default=SWITCH_FIELD_DEFAULTS["static_route_subnet_mask"], nullable=False
+    )
+    static_route_default_gateway_ip: Mapped[str] = mapped_column(
+        String(64), default=SWITCH_FIELD_DEFAULTS["static_route_default_gateway_ip"], nullable=False
+    )
+    static_route_default_gateway_distance: Mapped[str] = mapped_column(
+        String(32), default=SWITCH_FIELD_DEFAULTS["static_route_default_gateway_distance"], nullable=False
+    )
+    firmware_file_name: Mapped[str] = mapped_column(String(128), default=SWITCH_FIELD_DEFAULTS["firmware_file_name"], nullable=False)
+    firmware_url: Mapped[str] = mapped_column(String(1024), default=SWITCH_FIELD_DEFAULTS["firmware_url"], nullable=False)
+    https_certificate: Mapped[str] = mapped_column(String(255), default=SWITCH_FIELD_DEFAULTS["https_certificate"], nullable=False)
+    https_certificate_key: Mapped[str] = mapped_column(String(255), default=SWITCH_FIELD_DEFAULTS["https_certificate_key"], nullable=False)
+    https_certificate_short_name: Mapped[str] = mapped_column(
+        String(255), default=SWITCH_FIELD_DEFAULTS["https_certificate_short_name"], nullable=False
+    )
+    https_certificate_key_short_name: Mapped[str] = mapped_column(
+        String(255), default=SWITCH_FIELD_DEFAULTS["https_certificate_key_short_name"], nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False)
 

@@ -7,9 +7,7 @@
 enableSSH () {
   logInfo "Enabling SSH."
 
-  if ( ! fileExists $SSH_PUBLIC_KEY_PATH_AND_FULLNAME ); then
-    createSSHKeyPair $SSH_PUBLIC_KEY_PATH_AND_NAME
-  fi
+  ensureSSHKeyPair "$SSH_PUBLIC_KEY_PATH_AND_NAME"
 
   copySSHKeyToTFTPFolder $SSH_PUBLIC_KEY_PATH_AND_FULLNAME
 

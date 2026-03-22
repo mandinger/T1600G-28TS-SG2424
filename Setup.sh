@@ -6,7 +6,7 @@
 # Usage:        ./setup.sh
 
 # Dependencies
-. Constants.sh
+. lib/Environment.sh
 . command/Config.sh
 . command/Enable.sh
 . command/Management.sh
@@ -32,7 +32,6 @@
 . option/EEE.sh
 . option/FactorySettings.sh
 . option/Firmware.sh
-. option/HostMachine.sh
 . option/HTTP.sh
 . option/HTTPS.sh
 . option/Interface.sh
@@ -53,9 +52,13 @@
 . option/User.sh
 . option/Vlan.sh
 
+# Load config from .env/.env.example and apply defaults.
+SCRIPT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+initializeEnvironmentConfig "$SCRIPT_ROOT"
+
 # Variables
 exitOption=0
-amountOfOptions=27
+amountOfOptions=26
 
 userHasProvidedArguments () {
   # 0 True and 1 False
@@ -79,56 +82,54 @@ runChosenOption () {
     1)
       runAllSetupScripts ;;
     2)
-      prepareHostMachine ;;
-    3)
       setStaticIP ;;
-    4)
+    3)
       enableSSH ;;
-    5)
+    4)
       enablePasswordEncryption ;;
-    6)
+    5)
       createBotUser ;;
-    7)
+    6)
       setLACP ;;
-    8)
+    7)
       setVlans ;;
-    9)
+    8)
       setPVID ;;
-    10)
+    9)
       setIPRouting ;;
-    11)
+    10)
       setInterfaces ;;
-    12)
+    11)
       setStaticRoutingToDefaultGateway ;;
-    13)
+    12)
       setSystemTimeUsingNTPServer ;;
-    14)
+    13)
       enableHTTPS ;;
-    15)
+    14)
       disableHTTP ;;
-    16)
+    15)
       setJumboSize ;;
-    17)
+    16)
       enableDoSDefend ;;
-    18)
+    17)
       setDeviceDescription ;;
-    19)
+    18)
       setSDMPreference ;;
-    20)
+    19)
       enableRemoteLogging ;;
-    21)
+    20)
       disableTelnet ;;
-    22)
+    21)
       enableEEE ;;
-    23)
+    22)
       upgradeFirmware ;;
-    24)
+    23)
       backup ;;
-    25)
+    24)
       reboot ;;
-    26)
+    25)
       resetWithFactorySettings ;;
-    27)
+    26)
       restoreSettingsFromLatestBackup ;;
   esac
   sendBreakLine
@@ -139,7 +140,6 @@ displayMenu() {
   echo "Type the number of the option you want to execute. [$index-$1]"
   echo "$((index++)) - Exit."
   echo "$((index++)) - Setup Switch from Zero to Hero!"
-  echo "$((index++)) - Prepare Host Machine."
   echo "$((index++)) - Set static IP."
   echo "$((index++)) - Enable SSH."
   echo "$((index++)) - Enable Password Encryption."

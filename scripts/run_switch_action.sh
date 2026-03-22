@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # Load original project scripts.
-. "$ROOT_DIR/Constants.sh"
+. "$ROOT_DIR/lib/Environment.sh"
 . "$ROOT_DIR/command/Config.sh"
 . "$ROOT_DIR/command/Enable.sh"
 . "$ROOT_DIR/command/Management.sh"
@@ -31,7 +31,6 @@ cd "$ROOT_DIR"
 . "$ROOT_DIR/option/EEE.sh"
 . "$ROOT_DIR/option/FactorySettings.sh"
 . "$ROOT_DIR/option/Firmware.sh"
-. "$ROOT_DIR/option/HostMachine.sh"
 . "$ROOT_DIR/option/HTTP.sh"
 . "$ROOT_DIR/option/HTTPS.sh"
 . "$ROOT_DIR/option/Interface.sh"
@@ -51,6 +50,9 @@ cd "$ROOT_DIR"
 . "$ROOT_DIR/option/Telnet.sh"
 . "$ROOT_DIR/option/User.sh"
 . "$ROOT_DIR/option/Vlan.sh"
+
+# Load .env defaults without overriding switch-specific runtime variables.
+initializeEnvironmentConfig "$ROOT_DIR"
 
 override_var() {
   local var_name="$1"
@@ -95,24 +97,6 @@ override_var BACKUP_PATH
 override_var HTTPS_FILES_PATH
 override_var HTTPS_CERTIFICATE
 override_var HTTPS_CERTIFICATE_KEY
-
-# Safe local defaults when variables were not injected by the web runner.
-DEFAULT_RUNTIME_BASE="$ROOT_DIR/data/runtime-default"
-if [[ "$SSH_PUBLIC_KEY_PATH" == "$HOME/.ssh/" ]]; then
-  SSH_PUBLIC_KEY_PATH="$DEFAULT_RUNTIME_BASE/ssh/"
-fi
-if [[ "$TFTP_DIRECTORY" == "/srv/tftp/" ]]; then
-  TFTP_DIRECTORY="$DEFAULT_RUNTIME_BASE/tftp/"
-fi
-if [[ "$HTTPS_FILES_PATH" == "/opt/certificates/switch.lan.homelab/" ]]; then
-  HTTPS_FILES_PATH="$DEFAULT_RUNTIME_BASE/certificates/"
-fi
-if [[ "$BACKUP_PATH" == "backup/" ]]; then
-  BACKUP_PATH="$DEFAULT_RUNTIME_BASE/backup/"
-fi
-if [[ "$FIRMWARE_PATH" == "firmware/" ]]; then
-  FIRMWARE_PATH="$DEFAULT_RUNTIME_BASE/firmware/"
-fi
 
 # Recompute dependent constants after overrides.
 SSH_PUBLIC_KEY_FULLNAME="${SSH_PUBLIC_KEY_NAME}.pub"
@@ -199,12 +183,6 @@ savePassword() {
   if [[ "$key" == "$USER_BOT" && -n "${RUNNER_BOT_PASSWORD_FILE:-}" ]]; then
     printf "%s" "$value" > "$RUNNER_BOT_PASSWORD_FILE"
   fi
-}
-
-prepareHostMachine() {
-  logInfo "Preparing container runtime paths."
-  mkdir -p "$BACKUP_PATH" "$FIRMWARE_PATH" "$TFTP_DIRECTORY" "$HTTPS_FILES_PATH" "$SSH_PUBLIC_KEY_PATH"
-  logInfo "Finished."
 }
 
 getIpAddress() {

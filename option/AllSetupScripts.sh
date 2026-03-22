@@ -8,7 +8,6 @@
 runAllSetupScripts () {
   logInfo "Running All Setup Scripts."
 
-  prepareHostMachine
   setStaticIP
   enableSSH
   enablePasswordEncryption

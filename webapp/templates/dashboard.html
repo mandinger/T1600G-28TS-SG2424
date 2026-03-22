@@ -1,41 +1,44 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="grid two">
-  <article class="card">
+<section class="card">
+  <div class="section-header">
     <h2>Switches</h2>
-    <table>
-      <thead>
-        <tr><th>Name</th><th>IP</th><th>Model</th><th></th></tr>
-      </thead>
-      <tbody>
-        {% for sw in switches %}
-        <tr>
-          <td>{{ sw.name }}</td>
-          <td>{{ sw.device_ip }}</td>
-          <td>{{ sw.model }}</td>
-          <td><a href="/ui/switches/{{ sw.id }}">Open</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </article>
+    {% if user.role and user.role.name == 'admin' %}
+    <details class="create-switch-panel">
+      <summary class="plus-btn" title="Create Switch" aria-label="Create Switch">+</summary>
+      <div class="create-switch-body">
+        <h3>Create Switch</h3>
+        <form method="post" action="/ui/switches/new" class="stack">
+          <label>Name</label>
+          <input name="name" required />
+          <label>Device IP/Host</label>
+          <input name="device_ip" required />
+          <label>Admin Password</label>
+          <input name="admin_password" type="password" />
+          <label>Bot Password (optional)</label>
+          <input name="bot_password" type="password" />
+          <button type="submit">Create</button>
+        </form>
+      </div>
+    </details>
+    {% endif %}
+  </div>
 
-  {% if user.role and user.role.name == 'admin' %}
-  <article class="card">
-    <h2>Create Switch</h2>
-    <form method="post" action="/ui/switches/new" class="stack">
-      <label>Name</label>
-      <input name="name" required />
-      <label>Device IP/Host</label>
-      <input name="device_ip" required />
-      <label>Admin Password</label>
-      <input name="admin_password" type="password" />
-      <label>Bot Password (optional)</label>
-      <input name="bot_password" type="password" />
-      <button type="submit">Create</button>
-    </form>
-  </article>
-  {% endif %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>IP</th><th>Model</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for sw in switches %}
+      <tr>
+        <td>{{ sw.name }}</td>
+        <td>{{ sw.device_ip }}</td>
+        <td>{{ sw.model }}</td>
+        <td><a href="/ui/switches/{{ sw.id }}">Open</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </section>
 
 <section class="card">
