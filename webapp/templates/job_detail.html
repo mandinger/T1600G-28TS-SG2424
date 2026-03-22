@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>Job #{{ job.id }} - {{ job.action_key }}</h2>
+  <p>Status: <span class="status {{ job.status }}">{{ job.status }}</span></p>
+  <p>Switch ID: {{ job.switch_id }}</p>
+  <p>Created: {{ job.created_at }}</p>
+  <p>Started: {{ job.started_at }}</p>
+  <p>Finished: {{ job.finished_at }}</p>
+  {% if job.error_message %}<p class="error">{{ job.error_message }}</p>{% endif %}
+  <a href="/api/jobs/{{ job.id }}/logs">Raw logs endpoint</a>
+</section>
+<section class="card">
+  <h3>Logs</h3>
+  <pre class="log-box">{{ log_text }}</pre>
+</section>
+<script>
+  if ("{{ job.status }}" === "pending" || "{{ job.status }}" === "running") {
+    setTimeout(() => window.location.reload(), 3000);
+  }
+</script>
+{% endblock %}

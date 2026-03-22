@@ -1,0 +1,38 @@
+:root {
+  --bg: #f3f4f6;
+  --ink: #111827;
+  --muted: #4b5563;
+  --card: #ffffff;
+  --accent: #0f766e;
+  --danger: #b91c1c;
+  --warn: #b45309;
+  --ok: #166534;
+}
+body { margin: 0; background: radial-gradient(circle at top left, #e6f4ea, var(--bg)); color: var(--ink); font-family: "IBM Plex Sans", "Segoe UI", sans-serif; }
+.centered { min-height: 100vh; display: grid; place-items: center; }
+.topbar { background: #0b3c49; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
+.brand { color: #fff; text-decoration: none; font-weight: 700; letter-spacing: .2px; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.container { max-width: 1200px; margin: 20px auto; padding: 0 16px 40px; }
+.card { background: var(--card); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.08); padding: 16px; margin-bottom: 16px; }
+.grid { display: grid; gap: 16px; }
+.grid.two { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.stack { display: grid; gap: 10px; }
+input, textarea, button { font: inherit; }
+input, textarea { width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 10px; }
+button { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.danger { background: var(--danger); }
+.muted { color: var(--muted); font-size: .92rem; }
+.warn { color: var(--warn); }
+.error { color: var(--danger); }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; border-bottom: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+.status { font-size: .86rem; padding: 2px 8px; border-radius: 999px; background: #d1d5db; }
+.status.succeeded { background: #bbf7d0; color: #14532d; }
+.status.running, .status.pending { background: #fde68a; color: #78350f; }
+.status.failed { background: #fecaca; color: #7f1d1d; }
+.action-form { display: flex; justify-content: space-between; gap: 12px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; }
+.log-box { background: #111827; color: #e5e7eb; border-radius: 8px; padding: 12px; overflow: auto; min-height: 220px; }
+.login-card { width: min(430px, 92vw); }
+.row-actions { display: flex; align-items: flex-end; }

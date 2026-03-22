@@ -1,0 +1,14 @@
+services:
+  switch-control-plane:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: switch-control-plane
+    network_mode: host
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_DATA_DIR: /app/data
+    volumes:
+      - ./data:/app/data

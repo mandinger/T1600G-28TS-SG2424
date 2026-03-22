@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>{{ switch.name }} ({{ switch.device_ip }})</h2>
+  {% if user.role and user.role.name == 'admin' %}
+  <form method="post" action="/ui/switches/{{ switch.id }}/update" class="grid two">
+    <label>Name<input name="name" value="{{ switch.name }}" required /></label>
+    <label>Device IP<input name="device_ip" value="{{ switch.device_ip }}" required /></label>
+    <label>Model<input name="model" value="{{ switch.model }}" /></label>
+    <label>Device Name<input name="device_name" value="{{ switch.device_name }}" /></label>
+    <label>Device Location<input name="device_location" value="{{ switch.device_location }}" /></label>
+    <label>Contact Info Base64<input name="device_contact_info" value="{{ switch.device_contact_info }}" /></label>
+    <label>Admin Username<input name="admin_username" value="{{ switch.admin_username }}" /></label>
+    <label>Admin Password<input name="admin_password" type="password" /></label>
+    <label>Bot Username<input name="bot_username" value="{{ switch.bot_username }}" /></label>
+    <label>Bot Privilege<input name="bot_privilege" value="{{ switch.bot_privilege }}" /></label>
+    <label>Bot Password<input name="bot_password" type="password" /></label>
+    <label>TFTP Source IP<input name="tftp_source_ip" value="{{ switch.tftp_source_ip }}" /></label>
+    <div class="row-actions">
+      <button type="submit">Update Switch</button>
+    </div>
+  </form>
+  <form method="post" action="/ui/switches/{{ switch.id }}/delete" onsubmit="return confirm('Delete switch?');">
+    <button class="danger" type="submit">Delete Switch</button>
+  </form>
+  {% endif %}
+</section>
+
+<section class="grid two">
+  <article class="card">
+    <h3>Profile JSON</h3>
+    <form method="post" action="/ui/switches/{{ switch.id }}/profile" class="stack">
+      <textarea name="profile_json" rows="24">{{ profile_json }}</textarea>
+      {% if user.role and (user.role.name == 'admin' or user.role.name == 'operator') %}
+      <button type="submit">Save Profile</button>
+      {% endif %}
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>Actions</h3>
+    {% if has_active_job %}
+      <p class="warn">A job is already active for this switch. New actions are blocked until completion.</p>
+    {% endif %}
+    <div class="stack">
+      {% for action in actions %}
+      <form method="post" action="/ui/switches/{{ switch.id }}/actions/{{ action.key }}" class="action-form">
+        <div>
+          <strong>{{ action.option_number }}. {{ action.display_name }}</strong>
+          <p class="muted">{{ action.description }}</p>
+          {% if action.required_inputs and ('current_ip' in action.required_inputs) %}
+            <label>Current IP (required for static IP)</label>
+            <input name="current_ip" placeholder="192.168.0.x" />
+          {% endif %}
+          {% if not action.enabled %}
+            <p class="warn">{{ action.disabled_reason }}</p>
+          {% endif %}
+        </div>
+        <button type="submit" {% if not action.enabled or has_active_job %}disabled{% endif %}>Run</button>
+      </form>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<section class="card">
+  <h3>Recent Switch Jobs</h3>
+  <table>
+    <thead><tr><th>ID</th><th>Action</th><th>Status</th><th>Created</th><th></th></tr></thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr>
+        <td>{{ job.id }}</td>
+        <td>{{ job.action_key }}</td>
+        <td><span class="status {{ job.status }}">{{ job.status }}</span></td>
+        <td>{{ job.created_at }}</td>
+        <td><a href="/ui/jobs/{{ job.id }}">Logs</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
